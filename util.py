@@ -1,0 +1,6 @@
+ERR = True
+OK = False
+
+STATUS_CALM = 0
+STATUS_MID = 1
+STATUS_BUSY = 2
