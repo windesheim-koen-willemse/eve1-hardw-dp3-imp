@@ -1,10 +1,19 @@
+from messages import send_event_message, MESSAGE_CRITICAL, MESSAGE_WARNING, MESSAGE_INFO
+
+# CONSTANTS
+
 STATE_EMPTY = 0
 STATE_CALM = 1
 STATE_NORMAL = 2
 STATE_BUSY = 3
 STATE_FULL = 4
 
+# VARIABLES
+
 active_state = STATE_EMPTY
+cache_active_state = None
+
+# UTILITIES
 
 def transitions_to(possible_transitions):
     global active_state
@@ -13,12 +22,16 @@ def transitions_to(possible_transitions):
         active_state = target_state
     pass
 
+# STATES
+
 def handle_empty(is_trigger, people, time):
+    if is_trigger: send_event_message(MESSAGE_CRITICAL, 'leeg')
     transitions_to([
         (STATE_CALM, people > 0)
     ])
 
 def handle_calm(is_trigger, people, time):
+    if is_trigger: send_event_message(MESSAGE_WARNING, 'rustig')
     transitions_to([
         (STATE_EMPTY, people == 0),
         (STATE_NORMAL, people > 30 and time > 5)
@@ -31,12 +44,30 @@ def handle_normal(is_trigger, people, time):
     ])
 
 def handle_busy(is_trigger, people, time):
+    if is_trigger: send_event_message(MESSAGE_WARNING, 'druk')
     transitions_to([
         (STATE_NORMAL, people < 130 and time <= 30), # Corrected
         (STATE_FULL, people == 160)
     ])
 
 def handle_full(is_trigger, people, time):
+    if is_trigger: send_event_message(MESSAGE_CRITICAL, 'vol')
     transitions_to([
         (STATE_BUSY, people < 160)
     ])
+
+handlers = [
+    (STATE_EMPTY, handle_empty),
+    (STATE_CALM, handle_calm),
+    (STATE_NORMAL, handle_normal),
+    (STATE_BUSY, handle_busy),
+    (STATE_FULL, handle_full)
+]
+
+def handle_active_state(people, waiting_time):
+    is_new_state = active_state != cache_active_state
+    if is_new_state: cache_active_state = active_state
+
+    for target_state, handler in handlers:
+        if active_state != target_state: continue
+        handler(is_new_state, people, waiting_time)
