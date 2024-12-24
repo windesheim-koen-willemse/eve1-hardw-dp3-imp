@@ -4,6 +4,10 @@ from util import ERR, OK
 _MAX_SHOWN_TIME_CHARACTERS = 7
 _SERIAL_FORMAT = "{status}{txt}"
 
+ICON_CALM = 0
+ICON_MID = 1
+ICON_BUSY = 2
+
 def send_serial_string(board, txt):
     board.send_sysex(STRING_DATA, util.str_to_two_byte_iter(txt))
 
