@@ -1,4 +1,5 @@
 from messages import send_event_message, MESSAGE_CRITICAL, MESSAGE_WARNING, MESSAGE_INFO
+from tft import ICON_CALM, ICON_MID, ICON_BUSY
 
 # CONSTANTS
 
@@ -21,6 +22,19 @@ def transitions_to(possible_transitions):
         if not condition: continue
         active_state = target_state
     pass
+
+def active_state_to_icon():
+    mapper = [
+        (STATE_EMPTY, ICON_CALM),
+        (STATE_CALM, ICON_CALM),
+        (STATE_NORMAL, ICON_MID),
+        (STATE_BUSY, ICON_BUSY),
+        (STATE_FULL, ICON_BUSY)
+    ]
+
+    for match_to, icon in mapper:
+        if active_state != match_to: continue
+        return icon
 
 # STATES
 
@@ -65,6 +79,7 @@ handlers = [
 ]
 
 def handle_active_state(people, waiting_time):
+    global cache_active_state
     is_new_state = active_state != cache_active_state
     if is_new_state: cache_active_state = active_state
 
