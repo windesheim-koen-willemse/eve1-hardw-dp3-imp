@@ -4,7 +4,7 @@ from ui import render
 
 # CONSTANTS
 
-MAX_HISTORY_LENGTH = 100
+MAX_HISTORY_LENGTH = 255
 
 CHANGE_ENTER = 0
 CHANGE_LEAVE = 1
@@ -30,6 +30,9 @@ def record_people_change(kind):
     change_history.append((kind, current_time))
     cap_history_at(MAX_HISTORY_LENGTH)
 
+def seconds_to_minutes(seconds):
+    return seconds/60
+
 #  MODEL
 
 def history_to_growth_factor(kind):
@@ -37,7 +40,7 @@ def history_to_growth_factor(kind):
     recording_start = change_history[0][1]
     recorded_time = max(time() - recording_start, 1)
     amount_of_matches = len(list(filter(lambda v: v[0] == kind, change_history)))
-    return amount_of_matches / recorded_time
+    return amount_of_matches / seconds_to_minutes(recorded_time)
 
 def calc_model_values():
     if len(change_history) == 0: return (0, 0, 0, 0)
@@ -55,7 +58,7 @@ def log_model_values(board):
     N, W, I, M = calc_model_values()
 
     waiting_time_in_queue = W
-    render(board)
+    render(board, W)
     send_event_message(MESSAGE_INFO, 'timer', {
         'wachtrij': N,
         'wachttijd': W,

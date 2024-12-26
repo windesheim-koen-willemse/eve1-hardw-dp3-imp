@@ -31,7 +31,7 @@ def on_leave_queue(is_btn_on):
     record_people_change(CHANGE_LEAVE)
 get_register_pin(board, 'd:3:i', on_leave_queue)
 
-render(board)
+render(board, 0)
 
 # LOOP
 
