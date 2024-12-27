@@ -20,13 +20,11 @@ board = Arduino(Arduino.AUTODETECT)
 board.samplingOn(SAMPLING_RATE)
 
 def on_enter_queue(is_btn_on):
-    global people_in_queue
     if not is_btn_on: return
     record_people_change(CHANGE_ENTER)
 get_register_pin(board, 'd:2:i', on_enter_queue)
 
 def on_leave_queue(is_btn_on):
-    global people_in_queue
     if not is_btn_on: return
     record_people_change(CHANGE_LEAVE)
 get_register_pin(board, 'd:3:i', on_leave_queue)
