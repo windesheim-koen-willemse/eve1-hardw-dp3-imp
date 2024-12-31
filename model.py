@@ -29,6 +29,8 @@ def record_people_change(kind, record_time = time()):
     global people_in_queue
     people_in_queue += 1 if kind == CHANGE_ENTER else -1
 
+    print(people_in_queue)
+
     if kind == CHANGE_LEAVE: return people_in_queue
     
     new_people_histo.append(record_time)
