@@ -32,6 +32,8 @@ def record_people_change(kind, record_time = time()):
     if kind == CHANGE_LEAVE: return people_in_queue
     
     new_people_histo.append(record_time)
+    print(people_in_queue)
+    print(new_people_histo)
     remove_old_enter_records(MAX_RECORD_LIVING_TIME_IN_SEC)
     return people_in_queue
 
