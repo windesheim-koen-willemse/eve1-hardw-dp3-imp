@@ -25,13 +25,18 @@ def remove_old_enter_records(time_before_now):
         if new_people_histo[record_index] >= min_time: continue
         del new_people_histo[record_people_change]
 
-def record_people_change(kind, record_time = time()):
+def record_people_change(kind, record_time = None):
+    if record_time == None: record_time = time()
+
     global people_in_queue
     people_in_queue += 1 if kind == CHANGE_ENTER else -1
 
     if kind == CHANGE_LEAVE: return people_in_queue
     
     new_people_histo.append(record_time)
+
+    print(new_people_histo)
+
     remove_old_enter_records(MAX_RECORD_LIVING_TIME_IN_SEC)
     return people_in_queue
 
