@@ -4,6 +4,7 @@ from states import handle_active_state
 from model import log_model_values, record_people_change, CHANGE_ENTER, CHANGE_LEAVE, people_in_queue, waiting_time_in_queue
 from time import time
 from ui import render
+from testability import symclick
 
 # CONSTANTS
 
