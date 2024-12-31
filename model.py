@@ -12,10 +12,18 @@ CHANGE_LEAVE = 1
 
 # VARIABLES
 
-people_in_queue = 100
+people_in_queue = 0
 waiting_time_in_queue = 0
 
 new_people_histo = []
+
+# EXPOSE VARIABLES
+
+def get_people_in_queue():
+    return people_in_queue
+
+def get_waiting_time_in_queue():
+    return waiting_time_in_queue
 
 #  UTILS
 
@@ -34,8 +42,6 @@ def record_people_change(kind, record_time = None):
     if kind == CHANGE_LEAVE: return people_in_queue
     
     new_people_histo.append(record_time)
-
-    print(new_people_histo)
 
     remove_old_enter_records(MAX_RECORD_LIVING_TIME_IN_SEC)
     return people_in_queue
@@ -60,13 +66,15 @@ def calc_model_values():
     W = T - S
     return (N, W, I, M)
 
-def log_model_values(board):
+def update_screen(board):
+    render(board, waiting_time_in_queue)
+
+def log_model_values():
     global waiting_time_in_queue
 
     N, W, I, M = calc_model_values()
 
     waiting_time_in_queue = W
-    render(board, W)
     send_event_message(MESSAGE_INFO, 'timer', {
         'wachtrij': N,
         'wachttijd': W,

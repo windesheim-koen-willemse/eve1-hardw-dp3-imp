@@ -20,6 +20,7 @@ def transitions_to(possible_transitions):
     global active_state
     for target_state, condition in possible_transitions:
         if not condition: continue
+        print("[from state {} to state {}]".format(active_state, target_state))
         active_state = target_state
     pass
 
@@ -46,12 +47,14 @@ def handle_empty(is_trigger, people, time):
 
 def handle_calm(is_trigger, people, time):
     if is_trigger: send_event_message(MESSAGE_WARNING, 'rustig')
+    if is_trigger: print("[state = calm]")
     transitions_to([
         (STATE_EMPTY, people == 0),
         (STATE_NORMAL, people > 30 and time > 5)
     ])
 
 def handle_normal(is_trigger, people, time):
+    if is_trigger: print("[state = normal]")
     transitions_to([
         (STATE_CALM, people <= 30 or time <= 5),
         (STATE_BUSY, people >= 130 or time > 30) # Corrected
@@ -79,6 +82,7 @@ handlers = [
 ]
 
 def handle_active_state(people, waiting_time):
+    if waiting_time < 0: waiting_time = 10000000000000000000000000000000000
     global cache_active_state
     is_new_state = active_state != cache_active_state
     if is_new_state: cache_active_state = active_state

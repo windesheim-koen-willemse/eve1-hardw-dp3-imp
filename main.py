@@ -1,7 +1,7 @@
 from pyfirmata2 import Arduino
 from util import get_register_pin
 from states import handle_active_state
-from model import log_model_values, record_people_change, CHANGE_ENTER, CHANGE_LEAVE, people_in_queue, waiting_time_in_queue
+from model import log_model_values, record_people_change, CHANGE_ENTER, CHANGE_LEAVE, get_people_in_queue, get_waiting_time_in_queue, update_screen
 from time import time
 from ui import render
 from testability import symclick
@@ -35,9 +35,14 @@ render(board, 0)
 # LOOP
 
 while True:
+    symclick(6, on_enter_queue)
+
     current_time = time()
     if current_time > timer_end:
-        timer_end = current_time + MODEL_CALC_INTERVAL
-        log_model_values(board)
+        log_model_values()
 
-    handle_active_state(people_in_queue, waiting_time_in_queue)
+    handle_active_state(get_people_in_queue(), get_waiting_time_in_queue())
+
+    if current_time > timer_end:
+        update_screen(board)
+        timer_end = current_time + MODEL_CALC_INTERVAL
