@@ -35,8 +35,6 @@ render(board, 0)
 # LOOP
 
 while True:
-    symclick(6, on_enter_queue)
-
     current_time = time()
     if current_time > timer_end:
         log_model_values()
