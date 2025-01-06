@@ -1,6 +1,8 @@
 from time import time
 from messages import send_event_message, MESSAGE_INFO
 from ui import render
+from live import update_live_data
+from states import active_state_to_text
 
 # CONSTANTS
 
@@ -75,6 +77,7 @@ def log_model_values():
     N, W, I, M = calc_model_values()
 
     waiting_time_in_queue = W
+    update_live_data(active_state_to_text(), W, N, people_in_queue, I)
     send_event_message(MESSAGE_INFO, 'timer', {
         'wachtrij': N,
         'wachttijd': W,

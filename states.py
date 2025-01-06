@@ -23,6 +23,14 @@ def transitions_to(possible_transitions):
         active_state = target_state
     pass
 
+def active_state_to_text():
+    if active_state == STATE_EMPTY: return "Empty"
+    if active_state == STATE_CALM: return "Calm"
+    if active_state == STATE_NORMAL: return "Normal"
+    if active_state == STATE_BUSY: return "Busy"
+    if active_state == STATE_FULL: return "Full"
+    return "Unknown"
+
 def active_state_to_icon():
     mapper = [
         (STATE_EMPTY, ICON_CALM),
