@@ -20,12 +20,16 @@ timer_end = time()+MODEL_CALC_INTERVAL
 board = Arduino(Arduino.AUTODETECT)
 board.samplingOn(SAMPLING_RATE)
 
+enter_queue_output_pin = board.get_pin('d:4:o')
 def on_enter_queue(is_btn_on):
+    enter_queue_output_pin.write(is_btn_on)
     if not is_btn_on: return
     record_people_change(CHANGE_ENTER)
 get_register_pin(board, 'd:2:i', on_enter_queue)
 
+leave_queue_output_pin = board.get_pin('d:5:o')
 def on_leave_queue(is_btn_on):
+    leave_queue_output_pin.write(is_btn_on)
     if not is_btn_on: return
     record_people_change(CHANGE_LEAVE)
 get_register_pin(board, 'd:3:i', on_leave_queue)
